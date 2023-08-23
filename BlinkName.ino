@@ -13,12 +13,13 @@
   These functions are generated with the Thing and added at the end of this sketch.
 */
 
+// Include necessary header file for IoT cloud properties
 #include "thingProperties.h"
 
 void setup() {
   // Initialize serial and wait for port to open:
   Serial.begin(9600);
-  pinMode(13, OUTPUT);
+  pinMode(13, OUTPUT);   // Set pin 13 as an output (LED)
   // This delay gives the chance to wait for a Serial Monitor without blocking if none is found
   //delay(1500);
 
@@ -39,14 +40,16 @@ void setup() {
   ArduinoCloud.printDebugInfo();
 }
 
+// Function to create a short LED pulse (dot) in Morse code
 void dot()
 {
   digitalWrite(13, HIGH);
   delay(300);
-  digitalWrite(13, LOW);
+  digitalWrite(13, LOW); 
   delay(900);
 }
 
+// Function to create a long LED pulse (dash) in Morse code
 void dash()
 {
   digitalWrite(13, HIGH);
@@ -55,10 +58,12 @@ void dash()
   delay(900);
 }
 
+// Function to convert an alphabet character to Morse code LED pulses
 void create_morse(char alpha)
 {
 switch (alpha)
 {
+  //morse code patterns for respective alphabets
 case 'a':
 case 'A': dot(); dash(); 
           break;
@@ -139,7 +144,7 @@ default: break;
 }
 
   void loop() {
-    ArduinoCloud.update();
+    ArduinoCloud.update(); // Update Arduino IoT Cloud connection
 
 
   }
@@ -150,20 +155,21 @@ default: break;
     Since Led is READ_WRITE variable, onLedChange() is
     executed every time a new value is received from IoT Cloud.
   */
+// Callback function triggered when the IoT Cloud property 'led' changes
   void onLedChange()  {
     // Add your code here to act upon Led change
-
+    // Check if the 'led' property is set to 1
     if (led == 1) {
-      char name[] = "tanya";
+      char name[] = "tanya";  // Morse code for the name "tanya"
 
-      for (int i = 0; i < sizeof(name); i++)
+      for (int i = 0; i < sizeof(name); i++)  // Iterate through each character in the name
       {
-            char alpha=name[i];
+            char alpha=name[i];   // Convert the character to Morse code
             create_morse(alpha);
       }
 
 
     } else {
-      digitalWrite(13, LOW);
+      digitalWrite(13, LOW);  // Turn off the LED if 'led' property is not set to 1
     }
   }
